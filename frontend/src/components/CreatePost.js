@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Paper, TextField, Button, Typography, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import api from '../api/axios';
+import axios from 'axios';
 
 const CreatePost = () => {
   const [title, setTitle] = useState('');
@@ -20,10 +20,11 @@ const CreatePost = () => {
     }
 
     try {
-      await api.post('/posts/', formData, {
+      await axios.post('http://localhost:8000/api/posts/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-        }
+        },
+        withCredentials: true,
       });
       navigate('/');
     } catch (error) {

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Paper, Typography, Button, Box, CardMedia } from '@mui/material';
 import moment from 'moment';
 import 'moment/locale/ru';
-import api from '../api/axios';
+import axios from 'axios';
 
 const PostDetail = () => {
   const [post, setPost] = useState(null);
@@ -13,7 +13,7 @@ const PostDetail = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await api.get(`/posts/${id}/`);
+        const response = await axios.get(`http://localhost:8000/api/posts/${id}/`);
         setPost(response.data);
       } catch (error) {
         console.error('Ошибка при загрузке поста:', error);

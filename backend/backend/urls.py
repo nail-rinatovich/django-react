@@ -16,13 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.authtoken import views
 from django.conf import settings
 from django.conf.urls.static import static
-from blog.views import HomeView
+from rest_framework.routers import DefaultRouter
+from blog.views import PostViewSet
+from .views import UserDetailView
+
+router = DefaultRouter()
+router.register(r'posts', PostViewSet)
 
 urlpatterns = [
-    path('', HomeView.as_view(), name='home'),
     path('admin/', admin.site.urls),
-    path('api/', include('blog.urls')),
-    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include(router.urls)),
+    path('api/auth/login/', views.obtain_auth_token),
+    path('api/auth/user/', UserDetailView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

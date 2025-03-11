@@ -9,10 +9,13 @@ from django.views.generic import ListView
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.AllowAny]  # Временно разрешаем всем
     
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        # Временно устанавливаем первого пользователя как автора
+        from django.contrib.auth.models import User
+        default_author = User.objects.first()
+        serializer.save(author=default_author)
 
 class HomeView(ListView):
     model = Post

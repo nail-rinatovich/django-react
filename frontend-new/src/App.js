@@ -1,36 +1,43 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Header from './components/Header';
 import PostList from './components/PostList';
 import PostDetail from './components/PostDetail';
 import CreatePost from './components/CreatePost';
+import Login from './components/Login';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
-  },
-});
+const PrivateRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
 
-function App() {
+  if (loading) {
+    return <div>Загрузка...</div>;
+  }
+
+  return isAuthenticated ? children : <Navigate to="/login" />;
+};
+
+const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <AuthProvider>
       <Router>
         <Header />
         <Routes>
           <Route path="/" element={<PostList />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/post/:id" element={<PostDetail />} />
-          <Route path="/create" element={<CreatePost />} />
+          <Route
+            path="/create-post"
+            element={
+              <PrivateRoute>
+                <CreatePost />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </Router>
-    </ThemeProvider>
+    </AuthProvider>
   );
-}
+};
 
 export default App; 

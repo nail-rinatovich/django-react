@@ -3,7 +3,7 @@ import { Container, Grid, Card, CardContent, CardMedia, Typography, CardActions,
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import 'moment/locale/ru';
-import api from '../api/axios';
+import axios from 'axios';
 
 moment.locale('ru');
 
@@ -13,7 +13,7 @@ const PostList = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await api.get('/posts/');
+        const response = await axios.get('http://localhost:8000/api/posts/');
         setPosts(response.data);
       } catch (error) {
         console.error('Ошибка при загрузке постов:', error);
